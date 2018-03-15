@@ -1,17 +1,19 @@
 from bs4 import BeautifulSoup
 import urllib
 import csv
-import unicodedata
-from itertools import izip_longest
-import re
+
 def scrap_stock_data():
 	# PURPLE = '\033[95m'
 	list_of_iter_data=[]
 	list_of_iter_company_name=[]
 	list_of_iter_detail_info=[]
 	site = "http://www.moneycontrol.com"
-	ok=urllib.urlopen("http://www.moneycontrol.com/india/stockpricequote/")
-	raw_data = ok.read()
+	stock_app_url = urllib.urlopen(site)
+	read_stock_app_url = stock_app_url.read()
+	retrive_stock_url = BeautifulSoup(read_stock_app_url,'lxml')
+	iteration = retrive_stock_url.find("a",{"title":"Stocks"}).get('href')
+	stocks_url = urllib.urlopen(iteration)
+	raw_data = stocks_url.read()
 	soup = BeautifulSoup(raw_data,'lxml')
 	# <div class="MT2 PA10 brdb4px alph_pagn">
 	iter = soup.find_all("div",{"class":"MT2 PA10 brdb4px alph_pagn"})
@@ -42,6 +44,7 @@ def scrap_stock_data():
 						iter_company_name = soup.find_all("h1",{"class":"b_42 company_name"})
 						iter_detail_info = soup.find_all("div",{"class":"FL gry10"})
 						iter_data = soup.find_all("div",{"class":"brdb PA5"})
+						print iter_company_name
 						for each in iter_company_name:
 							uni_to_str = str(each.getText())
 							formated_text = (" ").join(uni_to_str.split())
