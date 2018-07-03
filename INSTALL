@@ -1,0 +1,8 @@
+1.)install required software
+  sudo apt install python ipython python-virtualenv
+
+2.)Active/deactive virtual environment.
+  virtualenv --no-site-packages env
+  source env/bin/activate
+
+3.) pip install -r requirements.txt
